@@ -1,0 +1,43 @@
+{
+  "name": "rxjs-practices",
+  "version": "1.0.0",
+  "description": "rxjs practices",
+  "main": "app.js",
+  "scripts": {
+    "clean": "rimraf dist/*",
+    "dist": "npm run clean && webpack --config webpack.config.js --display-error-details",
+    "watch": "webpack -d --watch --config webpack.config.js --display-error-details",
+    "start": "webpack-dev-server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DavisChang/RxJS-practices.git"
+  },
+  "keywords": [
+    "rxjs",
+    "reactive",
+    "programming",
+    "observables"
+  ],
+  "author": "Davis Chang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DavisChang/RxJS-practices/issues"
+  },
+  "homepage": "https://github.com/DavisChang/RxJS-practices#readme",
+  "dependencies": {
+    "jquery": "^3.3.1",
+    "rxjs": "^6.3.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
+    "babel-loader": "^8.0.4",
+    "babel-preset-env": "^1.7.0",
+    "html-webpack-plugin": "^3.2.0",
+    "webpack": "^4.20.2",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.9"
+  }
+}
