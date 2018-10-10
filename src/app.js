@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { fromEvent, Observable, of, from, interval, range, merge, concat } from 'rxjs';
-import { catchError, take, map, auditTime, pluck, mergeMap } from 'rxjs/operators';
+import { catchError, take, map, auditTime, pluck, mergeMap, switchMap } from 'rxjs/operators';
 
 console.log('RxJS Practices!!');
 
@@ -163,4 +163,8 @@ of('Hello')
 .pipe(mergeMap(v => of(`${v} Everyone`)))
 .subscribe(x => console.log(x));
 
+/* Maps each value to an Observable, then flattens all of these inner Observables. */
+fromEvent(document, 'click')
+.pipe(switchMap((ev) => interval(1000)), take(30))
+.subscribe(x => console.log(x));
 
