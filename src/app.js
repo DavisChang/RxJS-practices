@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { fromEvent, Observable, of, from, interval, range, merge } from 'rxjs';
+import { fromEvent, Observable, of, from, interval, range, merge, concat } from 'rxjs';
 import { catchError, take, map, throttleTime, pluck } from 'rxjs/operators';
 
 console.log('RxJS Practices!!');
@@ -98,7 +98,7 @@ fromEvent($('#promise_input'), 'keyup')
 });
 
 
-interval(3000).pipe(take(5), map(v => 2 * v))
+interval(1000).pipe(take(5), map(v => 2 * v))
 .subscribe(
   x => {
     console.log(x);
@@ -126,7 +126,6 @@ range(0, 5)
 
 const interval1$ = interval(2000).pipe(map(v => `= merge1 =: ${v}`));
 const interval2$ = interval(500).pipe(map(v => `===== merge2 =====: ${v}`));
-
 merge(interval1$, interval2$)
 .pipe(take(25))
 .subscribe(
@@ -138,5 +137,20 @@ merge(interval1$, interval2$)
   },
   () => {
     console.log('merge interval - completed');
+  },
+);
+
+const range1$ = range(0, 5).pipe(map(v => `| range1 |: ${v}`));
+const range2$ = range(6, 5).pipe(map(v => `||||| range2 |||||: ${v}`));
+concat(range1$, range2$)
+.subscribe(
+  x => {
+    console.log(x);
+  },
+  err => {
+    console.log(err);
+  },
+  () => {
+    console.log('concat range - completed');
   },
 );
