@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { fromEvent, Observable, of, from, interval, range } from 'rxjs';
+import { fromEvent, Observable, of, from, interval, range, merge } from 'rxjs';
 import { catchError, take, map, throttleTime, pluck } from 'rxjs/operators';
 
 console.log('RxJS Practices!!');
@@ -124,3 +124,19 @@ range(0, 5)
   },
 );
 
+const interval1$ = interval(2000).pipe(map(v => `= merge1 =: ${v}`));
+const interval2$ = interval(500).pipe(map(v => `===== merge2 =====: ${v}`));
+
+merge(interval1$, interval2$)
+.pipe(take(25))
+.subscribe(
+  x => {
+    console.log(x);
+  },
+  err => {
+    console.log(err);
+  },
+  () => {
+    console.log('merge interval - completed');
+  },
+);
