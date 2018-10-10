@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { fromEvent, Observable, of, from, interval, range, merge, concat } from 'rxjs';
-import { catchError, take, map, throttleTime, pluck } from 'rxjs/operators';
+import { catchError, take, map, auditTime, pluck, mergeMap } from 'rxjs/operators';
 
 console.log('RxJS Practices!!');
 
@@ -83,9 +83,13 @@ getUserInfo('DavisChang').then(result => {
   console.log('DavisChang result:', result);
 })
 
-
+/*
+* For scroll events you might also want to use auditTime
+* but it you only want to do something after a scroll you should use debounceTime.
+* Using throttleTime can be dangerous because you may never receive the last event.
+ */
 fromEvent($('#promise_input'), 'keyup')
-.pipe(throttleTime(1000), pluck('target', 'value'))
+.pipe(auditTime(1000), pluck('target', 'value'))
 .subscribe(userName => {
   /* just use from instead of fromPromise */
   from(getUserInfo(userName))
@@ -154,3 +158,9 @@ concat(range1$, range2$)
     console.log('concat range - completed');
   },
 );
+
+of('Hello')
+.pipe(mergeMap(v => of(`${v} Everyone`)))
+.subscribe(x => console.log(x));
+
+
