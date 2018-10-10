@@ -1,6 +1,6 @@
 import $ from 'jquery';
-import { fromEvent, Observable, of, from } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { fromEvent, Observable, of, from, interval, range } from 'rxjs';
+import { catchError, take, map, throttleTime, pluck } from 'rxjs/operators';
 
 console.log('RxJS Practices!!');
 
@@ -84,8 +84,9 @@ getUserInfo('DavisChang').then(result => {
 })
 
 
-fromEvent($('#promise_input'), 'keyup').subscribe(event => {
-  const userName = event.target.value;
+fromEvent($('#promise_input'), 'keyup')
+.pipe(throttleTime(1000), pluck('target', 'value'))
+.subscribe(userName => {
   /* just use from instead of fromPromise */
   from(getUserInfo(userName))
     .subscribe(result => {
@@ -97,4 +98,29 @@ fromEvent($('#promise_input'), 'keyup').subscribe(event => {
 });
 
 
+interval(3000).pipe(take(5), map(v => 2 * v))
+.subscribe(
+  x => {
+    console.log(x);
+  },
+  err => {
+    console.log(err);
+  },
+  () => {
+    console.log('interval - completed');
+  },
+);
+
+range(0, 5)
+.subscribe(
+  x => {
+    console.log(x);
+  },
+  err => {
+    console.log(err);
+  },
+  () => {
+    console.log('range - completed');
+  },
+);
 
