@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { fromEvent, Observable, of, from, interval, range, merge, concat } from 'rxjs';
-import { catchError, take, map, auditTime, pluck, mergeMap, switchMap } from 'rxjs/operators';
+import { catchError, take, map, auditTime, pluck, mergeMap, switchMap, delay, flatMap, takeUntil } from 'rxjs/operators';
 
 console.log('RxJS Practices!!');
 
@@ -128,6 +128,11 @@ range(0, 5)
   },
 );
 
+interval(1000)
+.pipe(takeUntil(fromEvent(document, 'click')))
+.subscribe(x => console.log(`takeUntil: ${x}`));
+
+
 const interval1$ = interval(2000).pipe(map(v => `= merge1 =: ${v}`));
 const interval2$ = interval(500).pipe(map(v => `===== merge2 =====: ${v}`));
 merge(interval1$, interval2$)
@@ -167,4 +172,33 @@ of('Hello')
 fromEvent(document, 'click')
 .pipe(switchMap((ev) => interval(1000)), take(30))
 .subscribe(x => console.log(x));
+
+
+fromEvent($('#fetchApi'), 'click')
+.pipe(flatMap(event => from(getUserInfo('DavisChang'))))
+.subscribe(
+  result => {
+    console.log('flatMap:', result);
+  },
+  err => {
+    console.log(err);
+  },
+  () => {
+    console.log('fetchApi - completed');
+  },
+);
+
+fromEvent($('#fetchApi'), 'click')
+.pipe(switchMap((event) => from(getUserInfo('DavisChang'))))
+.subscribe(
+  result => {
+    console.log('switchMap:', result);
+  },
+  err => {
+    console.log(err);
+  },
+  () => {
+    console.log('fetchApi - completed');
+  },
+);
 
